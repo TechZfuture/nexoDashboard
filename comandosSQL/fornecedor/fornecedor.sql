@@ -1,0 +1,32 @@
+create table stakeholder(
+	type varchar(15),
+    id varchar(40) key,
+    isDeleted boolean,
+    name varchar(100),
+	email varchar(200),
+    phone varchar(20),
+    documentNumber varchar(30),
+    documentType char(4),
+    comunicationContactName varchar(30),
+    comunicationEmail varchar(200),
+    comunicationPhone varchar(20),
+    comunicationCellPhone varchar(11),
+    comunicationWebsite varchar(30),
+    addressLine1 varchar(200),
+    addressLine2 varchar(200),
+    addressNumber int,
+    addressDistrict varchar(50),
+    addressCity varchar(50),
+	addressState char(10),
+    addressZipCode varchar(10),
+    addressCountry varchar(30),
+    addressIbgeCode varchar(30),
+    bankName varchar(20),
+    bankAgency varchar(10),
+    bankAccountNumber varchar(20),
+    bankAccountType int,
+    companyName varchar(200),
+    companyMunicipalInscription varchar(20)
+);
+
+drop table stakeholder;
