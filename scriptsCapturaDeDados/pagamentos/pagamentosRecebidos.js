@@ -46,12 +46,12 @@ async function inserirDados(data) {
 
       const query =
         existe.length > 0
-          ? `UPDATE paymentsReceivable SET categoryId = ?, categoryName = ?, value = ?, type = ?, parent = ?, parentId = ?, scheduleId = ?, typeOperation = ?, isEntry = ?, isBill = ?,
+          ? `UPDATE paymentsReceivable SET categoryId = ?, categoryName = ?, value = ?, type = ?, categoryParentName = ?, parentId = ?, scheduleId = ?, typeOperation = ?, isEntry = ?, isBill = ?,
             isDebiteNote = ?, isFlagged = ?, isDued = ?, dueDate = ?, accrualDate = ?, scheduleDate = ?, createDate = ?, isPaid = ?, costCenterValueType = ?, paidValue = ?,
             openValue = ?, stakeholderId = ?, stakeholderType = ?, stakeholderName = ?, stakeholderIsDeleted = ?, description = ?, reference = ?, hasInstallment = ?, installmentId = ?,
             hasRecurrence = ?, hasOpenEntryPromise = ?, hasEntryPromise = ?, autoGenerateEntryPromise = ?, hasInvoice = ?, hasPendingInvoice = ?, hasScheduleInvoice = ?,
             autoGenerateNfseType = ?, isPaymentScheduled = ? WHERE id = ?`
-          : `INSERT INTO paymentsReceivable (id, categoryId, categoryName, value, type, parent, parentId, scheduleId, typeOperation, isEntry, isBill, isDebiteNote, isFlagged,
+          : `INSERT INTO paymentsReceivable (id, categoryId, categoryName, value, type, categoryParentName, parentId, scheduleId, typeOperation, isEntry, isBill, isDebiteNote, isFlagged,
               isDued, dueDate, accrualDate, scheduleDate, createDate, isPaid, costCenterValueType, paidValue, openValue, stakeholderId, stakeholderType, stakeholderName,
               stakeholderIsDeleted, description, reference, hasInstallment, installmentId, hasRecurrence, hasOpenEntryPromise, hasEntryPromise, autoGenerateEntryPromise,
               hasInvoice, hasPendingInvoice, hasScheduleInvoice, autoGenerateNfseType, isPaymentScheduled, status, valorCorreto) 

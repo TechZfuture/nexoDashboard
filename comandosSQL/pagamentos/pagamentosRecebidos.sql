@@ -4,7 +4,7 @@ create table paymentsReceivable(
      categoryName varchar(50),
      value decimal(12, 2),
      type char(3),
-     parent varchar(50),
+     categoryParentName varchar(50),
      parentId varchar(40),
      scheduleId varchar(40),
      typeOperation char(10),
@@ -42,3 +42,5 @@ create table paymentsReceivable(
      status varchar(30),
      valorCorreto decimal(12,2)
  )	
+
+ drop table paymentsReceivable;

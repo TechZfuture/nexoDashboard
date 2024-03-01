@@ -14,7 +14,7 @@ function anoMesAtual() {
 const { ano, mes } = anoMesAtual();
 
 // FUNÇÃO RESPONSÁVEL POR CAPTURAR OS DADOS DO NIBO
-async function buscarDados() {
+// async function buscarDados() {
   const apiUrl = `https://api.nibo.com.br/empresas/v1/payments?$filter=year(date) eq ${ano} and month(date) eq ${mes}&apitoken=${apitoken}`;
   // const apiUrl = `https://api.nibo.com.br/empresas/v1/payments?apitoken=${apitoken}`
   
@@ -24,7 +24,6 @@ async function buscarDados() {
   } catch (error) {
     console.error("Erro ao buscar dados da API:", error);
     return [];
-  }
 }
 
 // FORMATAR DATA PARA O MYSQL
@@ -233,12 +232,61 @@ async function deletarDados(data) {
   }
 }
 
+async function inserirNegativoPositivo() {
+  const connection = await mysql.createConnection(dbConfig)
+
+  try {
+    await connection.execute('UPDATE externalPayments SET negativo = ?', [true])
+  } catch (error) {
+    console.error('Erro ao inserir valor "false" na coluna "negativo":', error)
+  } finally {
+    connection.end() // Feche a conexão com o banco de dados
+  }
+}
+
+async function inserirRealizados(){
+  const connection = await mysql.createConnection(dbConfig)
+
+  try {
+    // Atualiza o status com base na diferença entre openValue e paidValue
+    const query = `
+      UPDATE externalPayments
+      SET status = 'Realizados'
+    `
+    await connection.execute(query)
+  } catch (error) {
+    console.error('Erro ao inserir valor na coluna "status":', error)
+  } finally {
+    connection.end() // Fecha a conexão com o banco de dados
+  }
+}
+
+async function inserirPagamentos(){
+  const connection = await mysql.createConnection(dbConfig)
+
+  try {
+    // Atualiza o status com base na diferença entre openValue e paidValue
+    const query = `
+      UPDATE externalPayments
+      SET recebidoPago = 'Pagamentos'
+    `
+    await connection.execute(query)
+  } catch (error) {
+    console.error('Erro ao inserir valor na coluna "status":', error)
+  } finally {
+    connection.end() // Fecha a conexão com o banco de dados
+  }
+}
+
 // FUNÇÃO PRINCIPAL
 (async () => {
   try {
     const dadosDaAPI = await buscarDados();
     if (dadosDaAPI.length > 0) {
       await inserirDados(dadosDaAPI);
+      await inserirNegativoPositivo()
+      await inserirRealizados()
+      await inserirPagamentos()
       // await deletarDados(dadosDaAPI);
     }
   } catch (error) {
