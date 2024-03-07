@@ -1,2 +1,2 @@
 @echo off
-node C:/Users/lguss/projects/nexo/scriptsCapturaDeDados/centroDeCustos/centroDeCustos.js
+node C:/Users/lguss/Projetos/nexo/nexoDashboard/scriptsCapturaDeDados/centroDeCustos/centroDeCustos.js

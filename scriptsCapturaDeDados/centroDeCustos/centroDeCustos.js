@@ -1,7 +1,7 @@
 const mysql = require("mysql2/promise");
 
 const dbConfig = require("../../configuracoesBancoDeDados/configBancoDeDados");
-const apitoken = require("../../../apitokens/configuracoesNexo/configAPI");
+const apitoken = require("../../../../informacoesAPI/nexo");
 
 // FUNÇÃO RESPONSÁVEL POR CAPTURAR OS DADOS DO NIBO
 async function buscarDados() {

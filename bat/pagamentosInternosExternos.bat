@@ -1,2 +1,2 @@
 @echo off
-node C:/Users/lguss/projects/nexo/scriptsCapturaDeDados/pagamentos/pagamentosInternosExternos.js
+node C:/Users/lguss/Projetos/nexo/nexoDashboard/scriptsCapturaDeDados/pagamentos/pagamentosInternosExternos.js

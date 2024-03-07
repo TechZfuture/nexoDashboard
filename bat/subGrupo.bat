@@ -1,2 +1,2 @@
 @echo off
-node C:/Users/lguss/projects/nexo/scriptsCapturaDeDados/categorias/subgrupo.js
+node C:/Users/lguss/Projetos/nexo/nexoDashboard/scriptsCapturaDeDados/categorias/subgrupo.js

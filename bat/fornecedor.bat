@@ -1,2 +1,2 @@
 @echo off
-node C:/Users/lguss/projects/nexo/scriptsCapturaDeDados/fornecedor/fornecedor.js
+node C:/Users/lguss/Projetos/nexo/nexoDashboard/scriptsCapturaDeDados/fornecedor/fornecedor.js

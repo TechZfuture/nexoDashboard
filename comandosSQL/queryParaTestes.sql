@@ -9,3 +9,5 @@ select count(*) from pastduepayments;
 select count(*) from externalincomingbills;
 select count(*) from internalincomingbills;
 use nexo;
+
+drop table scheduledpayments;

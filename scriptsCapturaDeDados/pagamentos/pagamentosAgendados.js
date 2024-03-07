@@ -2,7 +2,7 @@ const mysql = require("mysql2/promise");
 const moment = require("moment");
 
 const dbConfig = require("../../configuracoesBancoDeDados/configBancoDeDados");
-const apitoken = require("../../../apitokens/configuracoesNexo/configAPI");
+const apitoken = require("../../../../informacoesAPI/nexo");
 
 // FUNÇÃO PARA RETORNAR O ANO E O MÊS ATUAL
 function anoMesAtual() {
@@ -15,6 +15,7 @@ const { ano, mes } = anoMesAtual();
 
 // FUNÇÃO RESPONSÁVEL POR CAPTURAR OS DADOS DO NIBO
 async function buscarDados() {
+  // const apiUrl = `https://api.nibo.com.br/empresas/v1/schedules/debit?apitoken=${apitoken}`;
   const apiUrl = `https://api.nibo.com.br/empresas/v1/schedules/debit?$filter=year(accrualDate) eq ${ano} and month(accrualDate) eq ${mes}&apitoken=${apitoken}`;
 
   try {

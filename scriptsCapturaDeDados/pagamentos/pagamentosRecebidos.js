@@ -2,7 +2,7 @@ const mysql = require("mysql2/promise");
 const moment = require("moment");
 
 const dbConfig = require("../../configuracoesBancoDeDados/configBancoDeDados");
-const apitoken = require("../../../apitokens/configuracoesNexo/configAPI");
+const apitoken = require("../../../../informacoesAPI/nexo");
 
 // FUNÇÃO PARA RETORNAR O ANO E O MÊS ATUAL
 function anoMesAtual() {

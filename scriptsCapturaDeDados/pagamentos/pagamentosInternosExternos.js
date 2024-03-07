@@ -1,8 +1,8 @@
 const mysql = require("mysql2/promise");
-const moment = require('moment')
+const moment = require("moment");
 
 const dbConfig = require("../../configuracoesBancoDeDados/configBancoDeDados");
-const apitoken = require("../../../apitokens/configuracoesNexo/configAPI");
+const apitoken = require("../../../../informacoesAPI/nexo");
 
 // FUNÇÃO PARA RETORNAR O ANO E O MÊS ATUAL
 function anoMesAtual() {
@@ -14,16 +14,17 @@ function anoMesAtual() {
 const { ano, mes } = anoMesAtual();
 
 // FUNÇÃO RESPONSÁVEL POR CAPTURAR OS DADOS DO NIBO
-// async function buscarDados() {
+async function buscarDados() {
   const apiUrl = `https://api.nibo.com.br/empresas/v1/payments?$filter=year(date) eq ${ano} and month(date) eq ${mes}&apitoken=${apitoken}`;
   // const apiUrl = `https://api.nibo.com.br/empresas/v1/payments?apitoken=${apitoken}`
-  
+
   try {
     const data = await (await fetch(apiUrl)).json();
     return data.items || [];
   } catch (error) {
     console.error("Erro ao buscar dados da API:", error);
     return [];
+  }
 }
 
 // FORMATAR DATA PARA O MYSQL
@@ -90,9 +91,9 @@ async function inserirDados(data) {
           : (inseridas += result.affectedRows);
       } else {
         const [existe1] = await connection.execute(
-            'SELECT * FROM externalPayments WHERE entryId = ?',
-            [item.entryId]
-          )
+          "SELECT * FROM externalPayments WHERE entryId = ?",
+          [item.entryId]
+        );
         const query =
           existe1.length > 0
             ? `UPDATE externalPayments SET bankBalanceDateIsGreaterThanEntryDate = ?,
@@ -102,7 +103,7 @@ async function inserirDados(data) {
             : `INSERT INTO externalPayments (entryId, bankBalanceDateIsGreaterThanEntryDate,
               scheduleId, isVirtual, accountid, accountname, accountisdeleted, stakeholderid, stakeholderName, stakeholderIsDeleted, categoryId, categoryName, categoryIsDeleted, categoryType, categoryParentId, categoryParentName,
               date, identifier, value, description, checkNumber, isReconciliated, isTransfer, isFlagged, costCenterId, costCenterName, costCenterPercent, costCenterValue, negativo, status, recebidoPago) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const params =
           existe1.length > 0
@@ -134,7 +135,7 @@ async function inserirDados(data) {
                 item.costCenter?.costCenterDescription || null,
                 item.costCenters[0]?.percent || null,
                 item.costCenters[0]?.value || null,
-                item.entryId
+                item.entryId,
               ]
             : [
                 item.entryId || null,
@@ -167,24 +168,24 @@ async function inserirDados(data) {
                 item.costCenters[0]?.value || null,
                 null,
                 null,
-                null
-              ]
+                null,
+              ];
 
-        const [result] = await connection.execute(query, params)
+        const [result] = await connection.execute(query, params);
 
         existe1.length > 0
           ? (atualizadas1 += result.changedRows)
-          : (inseridas1 += result.affectedRows)
+          : (inseridas1 += result.affectedRows);
       }
     }
     console.log("\n-- Pagamentos Internos --");
     console.log(
       `${atualizadas} consultas atualizadas no banco de dados.\n${inseridas} consultas inseridas no banco de dados.`
     );
-    console.log("\n-- Pagamentos Externos --")
+    console.log("\n-- Pagamentos Externos --");
     console.log(
-        `${atualizadas1} consultas atualizadas no banco de dados.\n${inseridas1} consultas inseridas no banco de dados.`
-      );
+      `${atualizadas1} consultas atualizadas no banco de dados.\n${inseridas1} consultas inseridas no banco de dados.`
+    );
   } catch (error) {
     console.error("Erro ao inserir dados no banco de dados:", error);
   } finally {
@@ -233,48 +234,50 @@ async function deletarDados(data) {
 }
 
 async function inserirNegativoPositivo() {
-  const connection = await mysql.createConnection(dbConfig)
+  const connection = await mysql.createConnection(dbConfig);
 
   try {
-    await connection.execute('UPDATE externalPayments SET negativo = ?', [true])
+    await connection.execute("UPDATE externalPayments SET negativo = ?", [
+      true,
+    ]);
   } catch (error) {
-    console.error('Erro ao inserir valor "false" na coluna "negativo":', error)
+    console.error('Erro ao inserir valor "false" na coluna "negativo":', error);
   } finally {
-    connection.end() // Feche a conexão com o banco de dados
+    connection.end(); // Feche a conexão com o banco de dados
   }
 }
 
-async function inserirRealizados(){
-  const connection = await mysql.createConnection(dbConfig)
+async function inserirRealizados() {
+  const connection = await mysql.createConnection(dbConfig);
 
   try {
     // Atualiza o status com base na diferença entre openValue e paidValue
     const query = `
       UPDATE externalPayments
       SET status = 'Realizados'
-    `
-    await connection.execute(query)
+    `;
+    await connection.execute(query);
   } catch (error) {
-    console.error('Erro ao inserir valor na coluna "status":', error)
+    console.error('Erro ao inserir valor na coluna "status":', error);
   } finally {
-    connection.end() // Fecha a conexão com o banco de dados
+    connection.end(); // Fecha a conexão com o banco de dados
   }
 }
 
-async function inserirPagamentos(){
-  const connection = await mysql.createConnection(dbConfig)
+async function inserirPagamentos() {
+  const connection = await mysql.createConnection(dbConfig);
 
   try {
     // Atualiza o status com base na diferença entre openValue e paidValue
     const query = `
       UPDATE externalPayments
       SET recebidoPago = 'Pagamentos'
-    `
-    await connection.execute(query)
+    `;
+    await connection.execute(query);
   } catch (error) {
-    console.error('Erro ao inserir valor na coluna "status":', error)
+    console.error('Erro ao inserir valor na coluna "status":', error);
   } finally {
-    connection.end() // Fecha a conexão com o banco de dados
+    connection.end(); // Fecha a conexão com o banco de dados
   }
 }
 
@@ -284,9 +287,9 @@ async function inserirPagamentos(){
     const dadosDaAPI = await buscarDados();
     if (dadosDaAPI.length > 0) {
       await inserirDados(dadosDaAPI);
-      await inserirNegativoPositivo()
-      await inserirRealizados()
-      await inserirPagamentos()
+      await inserirNegativoPositivo();
+      await inserirRealizados();
+      await inserirPagamentos();
       // await deletarDados(dadosDaAPI);
     }
   } catch (error) {
